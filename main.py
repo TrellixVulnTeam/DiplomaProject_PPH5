@@ -1,33 +1,15 @@
+from github import Github
 from kivy.lang import Builder
-from kivy.properties import StringProperty, ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
-from kivy.factory import Factory
-from kivymd.app import MDApp
-from kivy.lang import Builder
-from github import Github
-from kivymd.uix.selectioncontrol import MDCheckbox
-from kivymd.icon_definitions import md_icons
-from kivymd.app import MDApp
-from kivymd.uix.list import IRightBodyTouch, OneLineAvatarIconListItem, OneLineListItem, TwoLineListItem
-from kivy.lang import Builder
-from kivy.properties import StringProperty
-
-# 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
-g = Github("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")
-user = g.get_user() # this line is needed to specify user
-repos = user.get_repos() # array with repos
-
-for x in repos:
-    if x.language != None and x.private == False:
-        print("{0} - repo name , {1} - language".format(x.name,x.language))
+from kivymd.uix.list import TwoLineListItem
 
 
+# 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
 
 class MainApp(MDApp):
     screen = Screen()
-    scr_mngr = ObjectProperty(None)
-    tokenscreen = ObjectProperty(None)
 
     def build(self):
         self.theme_cls.primary_palette = 'Blue'
@@ -38,31 +20,31 @@ class MainApp(MDApp):
         self.root.current = screen
         print("switching screen to tokenscreen")
 
-    # def on_start(self):
-    #     tokenValue = self.scr_mngr.tokenscreen.tokenfield.text
-    #     g = Github(tokenValue)
-    #     user = g.get_user()
-    #     repos = user.get_repos()
+
+g = Github("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 ")
+user = g.get_user()  # this line is needed to specify user
+repos = user.get_repos()  # array with repos
+
+for x in repos:
+    if x.language is not None and x.private == False:
+        print("{0} - repo name , {1} - language".format(x.name, x.language))
 
 
 class TokenScreen(Screen):
-    # def getToken(self):
-    #     tokenValue = self.scr_mng.tokenID.tokenfield.text
-    #     g = Github(tokenValue)
-    #     user = g.get_user("radiano2")
-    #     repos = user.get_repos()
-    pass
+    def on_pre_leave(self, *args):
+        tokenValue = self.ids.tokenFieldID.text
+        print(tokenValue)
+    # pass
 
 
 class ListScreen(Screen):
-
     def on_pre_enter(self, *args):
-
         for x in repos:
             if x.language != None:
                 self.ids.container.add_widget(
                     TwoLineListItem(text=x.name, secondary_text=x.language)
                 )
+    # pass
 
 
 class RepoScreen(Screen):

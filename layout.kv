@@ -4,63 +4,44 @@ ScreenManager:
     ListScreen:
     RepoScreen:
 
-
 <TokenScreen>:
-    id:tokenscreen
+    id:tokenscreenID
     name:'tokenscreen'
     MDToolbar:
-        id:toolbar
+        id:toolbarID
         title:"TokenScreen"
         md_bg_color: app.theme_cls.primary_color
         elevation : 10
         left_action_items : [["arrow-left",lambda x: x]]
-
         pos_hint:{"top":1}
-
-
-
-
     MDTextFieldRound:
-        id:tokenfield
+        id:tokenFieldID
         hint_text:"token"
         mode:"rectangle"
         pos_hint: {'center_x':0.5,'center_y':0.6}
         size_hint_x:None
         width:250
-
-
-
     MDRectangleFlatButton:
         text:"test"
         pos_hint:{'center_x':0.5,'center_y':0.5}
         on_press: root.manager.current = 'listscreen'
         on_press:print("Switching to listscreen")
-#        on_press:print()
 <ListScreen>:
+    id:listScreenID
     name:'listscreen'
     BoxLayout:
         orientation: 'vertical'
-
-
     MDToolbar:
-        id:toolbar
-
+        id:toolbarID
         title:"ListScreen"
         md_bg_color: app.theme_cls.primary_color
         elevation : 10
         left_action_items : [["arrow-left",lambda x: app.set_screen("tokenscreen")]]
         pos_hint:{"top":1}
-
-
-
-
     ScrollView:
-        y: -toolbar.height
+        y: -toolbarID.height
         MDList:
             id:container
-
-
-
-
 <RepoScreen>:
+    id:repoScreenID
     name:'reposcreen'
