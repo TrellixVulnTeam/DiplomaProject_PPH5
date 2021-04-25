@@ -1,12 +1,12 @@
 ScreenManager:
-    id:screen_manager
+    id:scr_mngr
     TokenScreen:
     ListScreen:
     RepoScreen:
 
 
 <TokenScreen>:
-    id:tokenID
+    id:tokenscreen
     name:'tokenscreen'
     MDToolbar:
         id:toolbar
@@ -21,6 +21,7 @@ ScreenManager:
 
 
     MDTextFieldRound:
+        id:tokenfield
         hint_text:"token"
         mode:"rectangle"
         pos_hint: {'center_x':0.5,'center_y':0.6}
@@ -34,6 +35,7 @@ ScreenManager:
         pos_hint:{'center_x':0.5,'center_y':0.5}
         on_press: root.manager.current = 'listscreen'
         on_press:print("Switching to listscreen")
+#        on_press:print()
 <ListScreen>:
     name:'listscreen'
     BoxLayout:
