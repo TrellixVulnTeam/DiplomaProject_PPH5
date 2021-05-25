@@ -16,6 +16,7 @@ ScreenManager:
         pos_hint:{"top":1}
     MDTextFieldRound:
         id:tokenFieldID
+        name:"tokenFieldName"
         hint_text:"token"
         mode:"rectangle"
         pos_hint: {'center_x':0.5,'center_y':0.6}
@@ -26,6 +27,7 @@ ScreenManager:
         pos_hint:{'center_x':0.5,'center_y':0.5}
         on_press: root.manager.current = 'listscreen'
         on_press:print("Switching to listscreen")
+        on_press:root.set_record()
 <ListScreen>:
     id:listScreenID
     name:'listscreen'

@@ -1,12 +1,19 @@
+import pymongo
 from github import Github
 from kivy.lang import Builder
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, NumericProperty
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivymd.uix.list import TwoLineListItem
+from pymongo import MongoClient
 
 
-# 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
+# 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
+
+# Ddm8ti59QkyxPwqR
+
+
+
 
 class MainApp(MDApp):
     screen = Screen()
@@ -20,31 +27,55 @@ class MainApp(MDApp):
         self.root.current = screen
         print("switching screen to tokenscreen")
 
-
-g = Github("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 ")
-user = g.get_user()  # this line is needed to specify user
-repos = user.get_repos()  # array with repos
-
-for x in repos:
-    if x.language is not None and x.private == False:
-        print("{0} - repo name , {1} - language".format(x.name, x.language))
-
+    def clearDB(self):
+        client = pymongo.MongoClient(
+            "mongodb+srv://radiano2:S4qa9ls4@pycluster.mph6u.mongodb.net/test?retryWrites=true&w=majority")
+        db = client["test"]
+        db.drop_collection("test")
 
 class TokenScreen(Screen):
     def on_pre_leave(self, *args):
-        tokenValue = self.ids.tokenFieldID.text
-        print(tokenValue)
-    # pass
+        tokenPassVar = self.ids.tokenFieldID.text
+
+    def set_record(self):
+        client = pymongo.MongoClient(
+            "mongodb+srv://radiano2:S4qa9ls4@pycluster.mph6u.mongodb.net/test?retryWrites=true&w=majority")
+        db = client["test"]
+        collection = db["test"]
+
+        post = {"_id": 0, "token": str(self.ids.tokenFieldID.text)}
+        collection.insert_one(post)
+
+    pass
 
 
 class ListScreen(Screen):
+    def load_token(self):
+        client = pymongo.MongoClient(
+            "mongodb+srv://radiano2:S4qa9ls4@pycluster.mph6u.mongodb.net/test?retryWrites=true&w=majority")
+        db = client["test"]
+        collection = db["test"]
+
+        post = collection.find_one({"_id": 0})
+
+        return post["token"]
+
     def on_pre_enter(self, *args):
+        main_object = MainApp()
+
+        g = Github(self.load_token())
+
+        main_object.clearDB()
+
+        user = g.get_user()
+        repos = user.get_repos()
         for x in repos:
-            if x.language != None:
+            if x.language is not None:
                 self.ids.container.add_widget(
                     TwoLineListItem(text=x.name, secondary_text=x.language)
                 )
-    # pass
+
+        pass
 
 
 class RepoScreen(Screen):
