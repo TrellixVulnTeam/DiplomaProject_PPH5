@@ -1,18 +1,41 @@
 ScreenManager:
     id:scr_mngr
+    OptionScreen:
     TokenScreen:
     ListScreen:
     RepoScreen:
+    LoginScreen:
 
+
+
+<OptionScreen>:
+    id:optionScreenID
+    name:'optionscreen'
+    MDToolbar:
+        id:toolbarID
+        title:"Choose login option"
+        md_bg_color: app.theme_cls.primary_color
+        elevation : 10
+        pos_hint:{"top":1}
+    MDRectangleFlatButton:
+        text:"login"
+        pos_hint:{'center_x':0.5,'center_y':0.65}
+        on_press: root.manager.current = 'loginscreen'
+        on_press:print("Switching to loginscreen")
+    MDRectangleFlatButton:
+        text:"token"
+        pos_hint:{'center_x':0.5,'center_y':0.5}
+        on_press: root.manager.current = 'tokenscreen'
+        on_press:print("Switching to tokenscreen")
 <TokenScreen>:
-    id:tokenscreenID
+    id:tokenScreenID
     name:'tokenscreen'
     MDToolbar:
         id:toolbarID
         title:"TokenScreen"
         md_bg_color: app.theme_cls.primary_color
         elevation : 10
-        left_action_items : [["arrow-left",lambda x: x]]
+        left_action_items : [["arrow-left",lambda x: app.set_screen("optionscreen")]]
         pos_hint:{"top":1}
     MDTextFieldRound:
         id:tokenFieldID
@@ -27,7 +50,7 @@ ScreenManager:
         pos_hint:{'center_x':0.5,'center_y':0.5}
         on_press: root.manager.current = 'listscreen'
         on_press:print("Switching to listscreen")
-        on_press:root.set_record()
+        on_press:root.set_token_record()
 <ListScreen>:
     id:listScreenID
     name:'listscreen'
@@ -47,3 +70,36 @@ ScreenManager:
 <RepoScreen>:
     id:repoScreenID
     name:'reposcreen'
+
+<LoginScreen>
+    id:loginScreenID
+    name:'loginscreen'
+    MDToolbar:
+        id:toolbarID
+        title:"LoginScreen"
+        md_bg_color: app.theme_cls.primary_color
+        elevation : 10
+        left_action_items : [["arrow-left",lambda x: app.set_screen("optionscreen")]]
+        pos_hint:{"top":1}
+    MDTextFieldRound:
+        id:loginFieldID
+        name:"loginFieldName"
+        hint_text:"login"
+        mode:"rectangle"
+        pos_hint: {'center_x':0.5,'center_y':0.6}
+        size_hint_x:None
+        width:250
+    MDTextFieldRound:
+        id:passwordFieldID
+        name:"passwordFieldName"
+        hint_text:"password"
+        mode:"rectangle"
+        pos_hint: {'center_x':0.5,'center_y':0.54}
+        size_hint_x:None
+        width:250
+    MDRectangleFlatButton:
+        text:"Show repos"
+        pos_hint:{'center_x':0.5,'center_y':0.5}
+        on_press: root.manager.current = 'listscreen'
+        on_press:print("Switching to listscreen")
+        on_press:root.set_login_record()
