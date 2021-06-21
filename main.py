@@ -8,7 +8,7 @@ from kivymd.uix.list import TwoLineListItem
 from pymongo import MongoClient
 
 
-# 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
+# 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
 
 # Ddm8ti59QkyxPwqR
 
@@ -32,11 +32,12 @@ class MainApp(MDApp):
         db.drop_collection("test")
         db.drop_collection("loginCol")
 
+    def repo_switch(self):
+        a = MDApp.get_running_app().root.current = 'reposcreen'
+        return a
+
 
 class TokenScreen(Screen):
-    def on_pre_leave(self, *args):
-        # tokenPassVar = self.ids.tokenFieldID.text
-        pass
 
     def set_token_record(self):
         client = pymongo.MongoClient(
@@ -47,33 +48,42 @@ class TokenScreen(Screen):
         post = {"_id": 0, "token": str(self.ids.tokenFieldID.text)}
         collection.insert_one(post)
 
-    pass
-
-
-class ListScreen(Screen):
-    def load_token(self):
-        client = pymongo.MongoClient(
-            "mongodb+srv://radiano2:S4qa9ls4@pycluster.mph6u.mongodb.net/test?retryWrites=true&w=majority")
-        db = client["test"]
-        collection = db["test"]
-        collection_login = db["loginCol"]
-
-        if collection.estimated_document_count() != 0:
-            post = collection.find_one({"_id": 0})
-            return Github(post["token"])
-        else:
-            post_login = collection_login.find_one({"_id": 0})
-            return Github(str(post_login["login"]), str(post_login["password"]))
-
     def on_pre_enter(self, *args):
         main_object = MainApp()
 
-        g = self.load_token()
-
         main_object.clearDB()
+
+
+def load_token():
+    client = pymongo.MongoClient(
+        "mongodb+srv://radiano2:S4qa9ls4@pycluster.mph6u.mongodb.net/test?retryWrites=true&w=majority")
+    db = client["test"]
+    collection = db["test"]
+    collection_login = db["loginCol"]
+
+    if collection.estimated_document_count() != 0:
+        post = collection.find_one({"_id": 0})
+        return Github(post["token"])
+    else:
+        post_login = collection_login.find_one({"_id": 0})
+        return Github(str(post_login["login"]), str(post_login["password"]))
+
+
+class ListScreen(Screen):
+
+    def repo_switch(self, screen):
+        self.root.current = screen
+
+    def on_pre_enter(self, *args):
+        main_object = MainApp()
+        list_obejct = ListScreen()
+        g = load_token()
+
+        # main_object.clearDB()
 
         user = g.get_user()
         repos = user.get_repos()
+
         for x in repos:
             if x.language is not None:
                 self.ids.container.add_widget(
@@ -84,7 +94,14 @@ class ListScreen(Screen):
 
 
 class RepoScreen(Screen):
-    pass
+    def on_pre_enter(self, *args):
+        g = load_token()
+
+        user = g.get_user()
+        repo = user.get_repo("DiplomaProject")
+
+        file_content = repo.get_contents("main.py")
+        print(file_content.decoded_content.decode())
 
 
 class LoginScreen(Screen):

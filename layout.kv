@@ -67,6 +67,8 @@ ScreenManager:
         y: -toolbarID.height
         MDList:
             id:container
+            on_touch_down:app.root.current = 'reposcreen'
+
 <RepoScreen>:
     id:repoScreenID
     name:'reposcreen'
