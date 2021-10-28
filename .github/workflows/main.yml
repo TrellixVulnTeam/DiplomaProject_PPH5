@@ -1,4 +1,4 @@
-name: PylintCI
+
 
 on: [push]
 
